@@ -6,6 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/funkybob/funky-qs.git"
+  },
   "author": "Curtis Maloney",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/funkybob/funky-qs/issues"
+  },
+  "homepage": "https://github.com/funkybob/funky-qs#readme"
 }

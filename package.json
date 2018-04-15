@@ -1,0 +1,11 @@
+{
+  "name": "@funkybob/qs",
+  "version": "1.0.0",
+  "description": "Simple QueryString parsing and building",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Curtis Maloney",
+  "license": "MIT"
+}

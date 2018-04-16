@@ -1,5 +1,5 @@
 
-let encode = (data) => {
+function encode (data) {
     let params = []
     Object.keys(data).forEach(k => {
         let v = data[k];
@@ -15,7 +15,7 @@ let encode = (data) => {
         .replace(/%20/g, '+');
 }
 
-let parse = (querystring) => {
+function parse (querystring) {
     let parts = {}
     querystring
         .replace(/^[#\?]/, '')

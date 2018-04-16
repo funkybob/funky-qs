@@ -7,6 +7,7 @@ function encode (data) {
         } else {
             acc.push([key, val])
         }
+        return acc;
     }, [])
     .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v))
     .join('&')

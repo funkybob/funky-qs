@@ -1,17 +1,16 @@
 
 function encode (data) {
-    let params = []
-    Object.entries(data).forEach([key, val] => {
+    return Object.entries(data)
+    .reduce((acc, [key, val]) => {
         if (Array.isArray(val)) {
-            val.forEach(o => params.push([key, o]))
+            val.forEach(o => acc.push([key, o]));
         } else {
-            params.push([key, val])
+            acc.push([key, val])
         }
-    })
-    return params
-        .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v))
-        .join('&')
-        .replace(/%20/g, '+');
+    }, [])
+    .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v))
+    .join('&')
+    .replace(/%20/g, '+');
 }
 
 function parse (querystring, data = {}) {

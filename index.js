@@ -1,12 +1,11 @@
 
 function encode (data) {
     let params = []
-    Object.keys(data).forEach(k => {
-        let v = data[k];
-        if (Array.isArray(v)) {
-            v.forEach(o => params.push([k, o]))
+    Object.entries(data).forEach([key, val] => {
+        if (Array.isArray(val)) {
+            val.forEach(o => params.push([key, o]))
         } else {
-            params.push([k, v])
+            params.push([key, val])
         }
     })
     return params
@@ -15,23 +14,23 @@ function encode (data) {
         .replace(/%20/g, '+');
 }
 
-function parse (querystring) {
-    let parts = {}
+function parse (querystring, data = {}) {
     querystring
         .replace(/^[#\?]/, '')
         .split('&')
         .map(p => p.replace(/\+/g, '%20').split('=', 2))
-        .forEach(([k, v]) => {
+        .reduce((acc, [k, v]) => {
             k = decodeURIComponent(k)
             v = decodeURIComponent(v)
-            if(k in parts) {
-                if (!Array.isArray(parts[k])) parts[k] = [parts[k]];
-                parts[k].push(v);
+            if(k in acc) {
+                if (!Array.isArray(acc[k])) acc[k] = [acc[k]];
+                acc[k].push(v);
             } else {
-                parts[k] = v;
+                acc[k] = v;
             }
-        })
-    return parts;
+            return acc;
+        }, data)
+    return data;
 }
 
 export default {

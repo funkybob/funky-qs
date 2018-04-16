@@ -20,6 +20,13 @@ will be removed, so it's safe to use on both location.search and location.hash.
 Any key that appears more than once in the query string will result in a list
 in the result, with the values in order of discovery.
 
+You can pass in an intial state to be updated:
+
+    params = qs.parse(window.location.hash, defaults)
+
+You can also use this to force some valies to be always be lists:
+
+    params = qs.parse(..., {names: []})
 
 Encode
 ------

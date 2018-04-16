@@ -1,6 +1,6 @@
 {
   "name": "@funkybob/qs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Simple QueryString parsing and building",
   "main": "index.js",
   "scripts": {

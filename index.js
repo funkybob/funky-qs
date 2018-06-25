@@ -1,4 +1,9 @@
 
+/**
+ * @desc Encode an Object to a QueryString
+ * @param {Object} data
+ * @returns {String}
+ */
 function encode (data) {
     return Object.entries(data)
     .reduce((acc, [key, val]) => {
@@ -14,6 +19,12 @@ function encode (data) {
     .replace(/%20/g, '+');
 }
 
+/**
+ * @desc Decode a QueryString to an Object
+ * @param {String} querystring
+ * @param {Object} [data] - Default data
+ * @returns {Object}
+ */
 function parse (querystring, data = {}) {
     querystring
         .replace(/^[#\?]/, '')

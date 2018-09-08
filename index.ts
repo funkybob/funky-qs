@@ -1,15 +1,19 @@
 
+interface FormdataObject {
+    [key: string]: string|Array<string>;
+}
+
 /**
  * @desc Encode an Object to a QueryString
- * @param {Object|Map|FormData} data
- * @returns {String}
+ * @param {FormdataObject | Map | FormData} data
+ * @returns {string}
  */
-function encode (data) {
+function encode (data : FormdataObject|Map<string, string>|FormData) : string {
     return Object.entries(data)
-        .reduce((acc, [key, val]) => {
+        .reduce((acc : Array<Array<string>>, [key, val]) => {
             if (Array.isArray(val)) {
-                for (let o of val) {
-                    acc.push([key, o])
+                for (let v of val) {
+                    acc.push([key, v])
                 }
             } else {
                 acc.push([key, val])
@@ -23,10 +27,11 @@ function encode (data) {
 
 /**
  * @desc Encode an Object to a FormData
- * @param {Object|Map} data
+ * @param {FormdataObject | Map } data
+ * @param {FormData} [form]
  * @returns {FormData}
  */
-function encodef (data, form) {
+function encodef (data : FormdataObject | Map<string, string|Array<string>>, form : FormData) {
     if (form === undefined) form = new FormData();
     return Object.entries(data)
         .forEach(([key, val]) => {
@@ -42,11 +47,11 @@ function encodef (data, form) {
 
 /**
  * @desc Decode a QueryString to an Object
- * @param {String} querystring
- * @param {Object} [data] - Default data
+ * @param {string} querystring
+ * @param {FormdataObject} [data] - Default data
  * @returns {Object}
  */
-function parse (querystring, data = {}) {
+function parse (querystring : string, data : FormdataObject = {}) : Object {
     querystring
         .replace(/^[#\?]/, '')
         .split('&')
@@ -56,9 +61,9 @@ function parse (querystring, data = {}) {
             v = decodeURIComponent(v)
             if(k in data) {
                 if (!Array.isArray(data[k])) {
-                    data[k] = [data[k]];
+                    data[k] = [(<string>data[k])];
                 }
-                data[k].push(v);
+                (<Array<string>>data[k]).push(v);
             } else {
                 data[k] = v;
             }
@@ -67,13 +72,12 @@ function parse (querystring, data = {}) {
 }
 
 /**
- * @desc Decode a QueryString to an FormData
- * @param {String} querystring
- * @param {FormData} [data] - Default data
- * @returns {Object}
+ * @desc Decode a QueryString to a FormData instance.
+ * @param {string} querystring
+ * @returns {FormData}
  */
-function parsef (querystring, data) {
-    if (data === undefined) data = new FormData();
+function parsef(querystring : string) : FormData {
+    let data = new FormData()
     querystring
         .replace(/^[#\?]/, '')
         .split('&')

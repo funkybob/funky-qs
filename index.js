@@ -1,22 +1,39 @@
 
 /**
  * @desc Encode an Object to a QueryString
- * @param {Object} data
+ * @param {Object|Map|FormData} data
  * @returns {String}
  */
 function encode (data) {
     return Object.entries(data)
-    .reduce((acc, [key, val]) => {
-        if (Array.isArray(val)) {
-            val.forEach(o => acc.push([key, o]));
-        } else {
-            acc.push([key, val])
-        }
-        return acc;
-    }, [])
-    .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v))
-    .join('&')
-    .replace(/%20/g, '+');
+        .reduce((acc, [key, val]) => {
+            if (Array.isArray(val)) {
+                val.forEach(o => acc.push([key, o]));
+            } else {
+                acc.push([key, val])
+            }
+            return acc;
+        }, [])
+        .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v))
+        .join('&')
+        .replace(/%20/g, '+');
+}
+
+/**
+ * @desc Encode an Object to a FormData
+ * @param {Object|Map} data
+ * @returns {FormData}
+ */
+function encodef (data, form) {
+    if (form === undefined) form = new FormData();
+    return Object.entries(data)
+        .forEach(([key, val]) => {
+            if (Array.isArray(val)) {
+                val.forEach(o => form.append([key, o]));
+            } else {
+                form.append([key, val])
+            }
+        });
 }
 
 /**
@@ -30,21 +47,41 @@ function parse (querystring, data = {}) {
         .replace(/^[#\?]/, '')
         .split('&')
         .map(p => p.replace(/\+/g, '%20').split('=', 2))
-        .reduce((acc, [k, v]) => {
+        .forEach(([k, v]) => {
             k = decodeURIComponent(k)
             v = decodeURIComponent(v)
-            if(k in acc) {
-                if (!Array.isArray(acc[k])) acc[k] = [acc[k]];
-                acc[k].push(v);
+            if(k in data) {
+                if (!Array.isArray(data[k])) data[k] = [data[k]];
+                data[k].push(v);
             } else {
-                acc[k] = v;
+                data[k] = v;
             }
-            return acc;
-        }, data)
+        })
+    return data;
+}
+
+/**
+ * @desc Decode a QueryString to an FormData
+ * @param {String} querystring
+ * @param {FormData} [data] - Default data
+ * @returns {Object}
+ */
+function parsef (querystring, data) {
+    if (data === undefined) data = new FormData();
+    querystring
+        .replace(/^[#\?]/, '')
+        .split('&')
+        .map(p => p.replace(/\+/g, '%20').split('=', 2))
+        .forEach(([k, v]) => data.append(
+            decodeURIComponent(k),
+            decodeURIComponent(v)
+        ))
     return data;
 }
 
 export default {
     encode,
-    parse
+    encodef,
+    parse,
+    parsef
 }

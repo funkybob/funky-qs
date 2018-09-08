@@ -24,9 +24,19 @@ You can pass in an intial state to be updated:
 
     params = qs.parse(window.location.hash, defaults)
 
-You can also use this to force some valies to be always be lists:
+You can also use this to force some values to be always be lists:
 
     params = qs.parse(..., {names: []})
+
+Parsef
+------
+
+Additionally, there's parsef, which will parse a querystring into a FormData instance.
+
+Differences from pares are as follows:
+
+- key order is retained
+- repeated keys result in repeated entries in the FormData instance.
 
 Encode
 ------

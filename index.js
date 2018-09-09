@@ -8,7 +8,9 @@ function encode (data) {
     return Object.entries(data)
         .reduce((acc, [key, val]) => {
             if (Array.isArray(val)) {
-                val.forEach(o => acc.push([key, o]));
+                for (let o of val) {
+                    acc.push([key, o])
+                }
             } else {
                 acc.push([key, val])
             }
@@ -29,9 +31,11 @@ function encodef (data, form) {
     return Object.entries(data)
         .forEach(([key, val]) => {
             if (Array.isArray(val)) {
-                val.forEach(o => form.append([key, o]));
+                for (let o of val) {
+                    form.append(key, o);
+                }
             } else {
-                form.append([key, val])
+                form.append(key, val)
             }
         });
 }
@@ -51,7 +55,9 @@ function parse (querystring, data = {}) {
             k = decodeURIComponent(k)
             v = decodeURIComponent(v)
             if(k in data) {
-                if (!Array.isArray(data[k])) data[k] = [data[k]];
+                if (!Array.isArray(data[k])) {
+                    data[k] = [data[k]];
+                }
                 data[k].push(v);
             } else {
                 data[k] = v;
